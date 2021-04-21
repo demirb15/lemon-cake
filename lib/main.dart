@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_template/theme/theme.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,6 +13,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      themeMode: ThemeMode.dark,
+      theme: AppTheme.light(context),
+      darkTheme: AppTheme.dark(context),
       localizationsDelegates: [
         AppLocalizations.delegate, // Add this line
         GlobalMaterialLocalizations.delegate,
@@ -22,9 +26,6 @@ class MyApp extends StatelessWidget {
         const Locale('en', ''), // English, no country code
         const Locale('tr', ''), // Spanish, no country code
       ],
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
       onGenerateTitle: (BuildContext context) =>
           AppLocalizations.of(context)!.title,
       home: MyHomePage(),
