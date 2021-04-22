@@ -1,0 +1,7 @@
+{
+    "app_title": "RocketBank",
+    "login_appbarr_title": "Login",
+    "login_username_textfield_placeholder":"Enter Username",
+    "login_password_textfield_placeholder":"Enter Password",
+    "login_login_button_title":"Login"
+}
