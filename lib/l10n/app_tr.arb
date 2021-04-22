@@ -1,7 +1,4 @@
 {
-    "app_title":"RocketBank",
-    "login_appbarr_title": "Giriş",
-    "login_username_textfield_placeholder":"Kullanıcı ismi",
-    "login_password_textfield_placeholder":"Şifre",
-    "login_login_button_title":"Login"
+    "title": "Flutter Demo Ana Sayfası",
+    "counter_label":"Buton'a basma sayınız"
 }
