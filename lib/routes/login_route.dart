@@ -1,54 +1,55 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_template/theme/theme.dart';
+import 'package:flutter_template/l10n/L10n.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_template/main.dart';
 
 class LoginRoute extends StatefulWidget {
+  LoginRoute({Key? key}) : super(key: key); //
   @override
-  LoginRouteState createState() {
-    return LoginRouteState();
-  }
+  _LoginRouteState createState() => _LoginRouteState();
 }
 
-class LoginRouteState extends State<LoginRoute> {
+class _LoginRouteState extends State<LoginRoute> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      //title: 'Flutter Demo',
-      themeMode: ThemeMode.dark,
-      theme: AppTheme.light(context),
-      darkTheme: AppTheme.dark(context),
-      localizationsDelegates: [
-        AppLocalizations.delegate, // Add this line
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('en', ''), // English, no country code
-        const Locale('tr', ''), // Spanish, no country code
-      ],
-      onGenerateTitle: (BuildContext context) =>
-          AppLocalizations.of(context)!.app_title,
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key); //
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
+    Locale _locale = Localizations.localeOf(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.login_appbarr_title),
         centerTitle: true,
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 10.0),
+            child: DropdownButton<Language>(
+              underline: SizedBox(),
+              icon: Text("${_locale.languageCode}".toUpperCase()),
+              onChanged: (_) {
+                _switchLanguage(_);
+              },
+              items: Language.languageList().map(
+                (Language lang) {
+                  return DropdownMenuItem<Language>(
+                      value: lang,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Text(
+                            lang.name,
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          Text(lang.flag),
+                        ],
+                      ));
+                },
+              ).toList(),
+            ),
+          )
+        ],
       ),
       body: Stack(
         children: <Widget>[
@@ -99,8 +100,38 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         _paddingTextField(_usernameTextField()),
         _paddingTextField(_passwordTextField()),
+        _rememberMeSwitch(),
         _loginButton(),
       ],
+    );
+  }
+
+  void _switchLanguage(_) {
+    Locale temp = Locale(_!.languageCode);
+    StartUpApp.setLocale(context, temp);
+  }
+
+  bool _rememberMeSwitchVar = false;
+  Widget _rememberMeSwitch() {
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Container(
+        constraints:
+            BoxConstraints.expand(width: double.infinity, height: 50.0),
+        child: SwitchListTile(
+          title: Text(AppLocalizations.of(context)!.login_remember_me_label),
+          inactiveTrackColor: Colors.white,
+          inactiveThumbColor: Colors.white,
+          activeColor: Colors.white,
+          activeTrackColor: Color.fromRGBO(128, 117, 211, 1),
+          value: _rememberMeSwitchVar,
+          onChanged: (bool value) {
+            setState(() {
+              _rememberMeSwitchVar = value;
+            });
+          },
+        ),
+      ),
     );
   }
 
@@ -120,9 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _loginButtonPressed() {
-    //TODO implement button pressed
-  }
+  void _loginButtonPressed() {}
   Padding _paddingTextField(Widget widget) {
     return Padding(
         padding: const EdgeInsets.only(top: 15.0, left: 35.0, right: 35.0),

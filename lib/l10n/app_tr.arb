@@ -3,5 +3,8 @@
     "login_appbarr_title": "Giriş",
     "login_username_textfield_placeholder":"Kullanıcı ismi",
     "login_password_textfield_placeholder":"Şifre",
-    "login_login_button_title":"Giriş"
+    "login_login_button_title":"Giriş",
+    "login_remember_me_label":"Beni Hatırla",
+    "not_found_page_title":"Sayfa Bulunamadı"
+
 }
