@@ -24,6 +24,11 @@ class AppTheme {
         buttonColor: AppColors.softBlue,
         disabledColor: AppColors.softBlue,
       ),
+      switchTheme: SwitchThemeData(
+        thumbColor: MaterialStateProperty.all(Colors.white),
+        trackColor: MaterialStateProperty.all(Colors.white),
+        overlayColor: MaterialStateProperty.all(Colors.white),
+      ),
       textTheme: Theme.of(context)
           .textTheme
           .apply(displayColor: Colors.black, bodyColor: Colors.black),
@@ -50,6 +55,11 @@ class AppTheme {
       buttonTheme: ButtonThemeData(
           buttonColor: AppColors.darkPeriwinkle,
           disabledColor: AppColors.darkPeriwinkle),
+      switchTheme: SwitchThemeData(
+        thumbColor: MaterialStateProperty.all(Colors.white),
+        trackColor: MaterialStateProperty.all(Colors.white),
+        overlayColor: MaterialStateProperty.all(Colors.white),
+      ),
       textTheme: Theme.of(context)
           .textTheme
           .apply(displayColor: Colors.white, bodyColor: Colors.white),

@@ -120,9 +120,6 @@ class _LoginRouteState extends State<LoginRoute> {
             BoxConstraints.expand(width: double.infinity, height: 50.0),
         child: SwitchListTile(
           title: Text(AppLocalizations.of(context)!.login_remember_me_label),
-          inactiveTrackColor: Colors.white,
-          inactiveThumbColor: Colors.white,
-          activeColor: Colors.white,
           activeTrackColor: Color.fromRGBO(128, 117, 211, 1),
           value: _rememberMeSwitchVar,
           onChanged: (bool value) {
@@ -151,7 +148,10 @@ class _LoginRouteState extends State<LoginRoute> {
     );
   }
 
-  void _loginButtonPressed() {}
+  void _loginButtonPressed() {
+    print("tried to log in");
+  }
+
   Padding _paddingTextField(Widget widget) {
     return Padding(
         padding: const EdgeInsets.only(top: 15.0, left: 35.0, right: 35.0),
@@ -168,8 +168,10 @@ class _LoginRouteState extends State<LoginRoute> {
     );
   }
 
+  TextEditingController userNameController = TextEditingController();
   Widget _usernameTextField() {
     return TextFormField(
+      controller: userNameController,
       autofocus: true,
       decoration: _textFormFieldDecoration(context,
           AppLocalizations.of(context)!.login_username_textfield_placeholder),
