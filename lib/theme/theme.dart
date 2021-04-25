@@ -12,14 +12,14 @@ class AppTheme {
       accentColor: AppColors.darkGreyBlueTwo,
       dialogBackgroundColor: AppColors.paleGrey,
       appBarTheme: AppBarTheme(
-          color: Colors.white,
-          iconTheme: IconThemeData(color: Colors.black),
-          actionsIconTheme: IconThemeData(color: Colors.black),
-          textTheme: TextTheme(
-              headline6: TextStyle(
-                  color: Colors.black,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w500))),
+        color: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
+        actionsIconTheme: IconThemeData(color: Colors.black),
+        textTheme: TextTheme(
+          headline6: TextStyle(
+              color: Colors.black, fontSize: 17, fontWeight: FontWeight.w500),
+        ),
+      ),
       buttonTheme: ButtonThemeData(
         buttonColor: AppColors.softBlue,
         disabledColor: AppColors.softBlue,
@@ -44,17 +44,21 @@ class AppTheme {
       accentColor: AppColors.darkPeriwinkleTwo,
       dialogBackgroundColor: AppColors.twilight,
       appBarTheme: AppBarTheme(
-          color: AppColors.darkGreyBlueTwo,
-          iconTheme: IconThemeData(color: Colors.white),
-          actionsIconTheme: IconThemeData(color: Colors.white),
-          textTheme: TextTheme(
-              headline6: TextStyle(
-                  color: Colors.white,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w500))),
+        color: AppColors.darkGreyBlueTwo,
+        iconTheme: IconThemeData(color: Colors.white),
+        actionsIconTheme: IconThemeData(color: Colors.white),
+        textTheme: TextTheme(
+          headline6: TextStyle(
+            color: Colors.white,
+            fontSize: 17,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
       buttonTheme: ButtonThemeData(
-          buttonColor: AppColors.darkPeriwinkle,
-          disabledColor: AppColors.darkPeriwinkle),
+        buttonColor: AppColors.darkPeriwinkle,
+        disabledColor: AppColors.darkPeriwinkle,
+      ),
       switchTheme: SwitchThemeData(
         thumbColor: MaterialStateProperty.all(Colors.white),
         trackColor: MaterialStateProperty.all(Colors.white),

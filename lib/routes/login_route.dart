@@ -1,10 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_template/l10n/L10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_template/main.dart';
+import 'package:flutter_template/theme/appColors.dart';
 
 class LoginRoute extends StatefulWidget {
   LoginRoute({Key? key}) : super(key: key); //
@@ -18,7 +17,7 @@ class _LoginRouteState extends State<LoginRoute> {
     Locale _locale = Localizations.localeOf(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.login_appbarr_title),
+        title: Text(AppLocalizations.of(context)!.login_navigationBar_title),
         centerTitle: true,
         actions: [
           Padding(
@@ -119,7 +118,8 @@ class _LoginRouteState extends State<LoginRoute> {
         constraints:
             BoxConstraints.expand(width: double.infinity, height: 50.0),
         child: SwitchListTile(
-          title: Text(AppLocalizations.of(context)!.login_remember_me_label),
+          title:
+              Text(AppLocalizations.of(context)!.login_rememberMe_label_text),
           activeTrackColor: Color.fromRGBO(128, 117, 211, 1),
           value: _rememberMeSwitchVar,
           onChanged: (bool value) {
@@ -132,6 +132,8 @@ class _LoginRouteState extends State<LoginRoute> {
     );
   }
 
+  var _onpressed;
+  var _buttonTextColor = Colors.white24;
   Widget _loginButton() {
     return Padding(
       padding: const EdgeInsets.all(15.0),
@@ -139,9 +141,13 @@ class _LoginRouteState extends State<LoginRoute> {
         constraints:
             BoxConstraints.expand(width: double.infinity, height: 50.0),
         child: CupertinoButton(
-          child: Text(AppLocalizations.of(context)!.login_login_button_title),
-          onPressed: _loginButtonPressed,
-          color: Color.fromARGB(255, 115, 106, 184),
+          child: Text(
+            AppLocalizations.of(context)!.login_login_button_title,
+            style: TextStyle(color: _buttonTextColor),
+          ),
+          onPressed: _onpressed,
+          color: AppColors.darkPeriwinkle,
+          disabledColor: AppColors.darkPeriwinkle,
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
       ),
@@ -149,7 +155,12 @@ class _LoginRouteState extends State<LoginRoute> {
   }
 
   void _loginButtonPressed() {
-    print("tried to log in");
+    setState(() {
+      username = usernameController.text;
+      password = passwordController.text;
+    });
+    // TODO: add login checks
+    print("$username -- $password");
   }
 
   Padding _paddingTextField(Widget widget) {
@@ -168,22 +179,40 @@ class _LoginRouteState extends State<LoginRoute> {
     );
   }
 
-  TextEditingController userNameController = TextEditingController();
+  late String username;
+  late String password;
+  TextEditingController usernameController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
   Widget _usernameTextField() {
     return TextFormField(
-      controller: userNameController,
+      controller: usernameController,
       autofocus: true,
       decoration: _textFormFieldDecoration(context,
-          AppLocalizations.of(context)!.login_username_textfield_placeholder),
+          AppLocalizations.of(context)!.login_username_text_field_placeholder),
       onChanged: (value) {},
     );
   }
 
   Widget _passwordTextField() {
     return TextFormField(
+      controller: passwordController,
       decoration: _textFormFieldDecoration(context,
-          AppLocalizations.of(context)!.login_password_textfield_placeholder),
-      onChanged: (value) {},
+          AppLocalizations.of(context)!.login_password_text_field_placeholder),
+      onChanged: (value) {
+        if (value.length == 6) {
+          setState(
+            () {
+              _buttonTextColor = Colors.white;
+              _onpressed = _loginButtonPressed;
+            },
+          );
+        } else {
+          setState(() {
+            _buttonTextColor = Colors.white24;
+            _onpressed = null;
+          });
+        }
+      },
       obscureText: true,
     );
   }
