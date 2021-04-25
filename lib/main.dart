@@ -6,6 +6,7 @@ import 'package:flutter_template/l10n/L10n.dart';
 import 'package:flutter_template/routes/route_names.dart';
 import 'package:flutter_template/theme/theme.dart';
 import 'package:flutter_template/routes/custom_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(StartUpApp());
@@ -24,14 +25,31 @@ class StartUpApp extends StatefulWidget {
 
 class _StartUpAppState extends State<StartUpApp> {
   Locale _locale = L10n.all.first;
-  void setLocale(Locale locale) {
+  Future<void> setLocale(Locale locale) async {
+    final _prefs = await SharedPreferences.getInstance();
+    await _prefs.setString("languageCode", locale.languageCode);
     setState(() {
       _locale = locale;
     });
   }
 
+  Future<Locale> getLocale() async {
+    final _prefs = await SharedPreferences.getInstance();
+    String _languageCode = _prefs.getString("languageCode") ?? 'en';
+    return Locale(_languageCode);
+  }
+
+  void loadPref() {
+    getLocale().then((locale) {
+      setState(() {
+        this._locale = locale;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    loadPref();
     return MaterialApp(
       themeMode: ThemeMode.dark,
       theme: AppTheme.light(context),
