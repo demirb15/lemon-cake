@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_template/l10n/L10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_template/main.dart';
 import 'package:flutter_template/theme/appColors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'custom_router.dart';
 
 class LoginRoute extends StatefulWidget {
   LoginRoute({Key? key}) : super(key: key); //
@@ -12,6 +16,25 @@ class LoginRoute extends StatefulWidget {
 }
 
 class _LoginRouteState extends State<LoginRoute> {
+  _LoginRouteState() {
+    getUsername().then((value) {
+      usernameController.text = value;
+      if (value != '') _rememberMeSwitchVar = true;
+    });
+  }
+  Future<String> getUsername() async {
+    final _prefs = await SharedPreferences.getInstance();
+    String _username = _prefs.getString("username") ?? "";
+    return _username;
+  }
+
+  bool _rememberMeSwitchVar = false;
+
+  String username = '';
+  String password = '';
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Locale _locale = Localizations.localeOf(context);
@@ -19,6 +42,7 @@ class _LoginRouteState extends State<LoginRoute> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.login_navigationBar_title),
         centerTitle: true,
+        leading: Container(),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 10.0),
@@ -110,7 +134,6 @@ class _LoginRouteState extends State<LoginRoute> {
     StartUpApp.setLocale(context, temp);
   }
 
-  bool _rememberMeSwitchVar = false;
   Widget _rememberMeSwitch() {
     return Padding(
       padding: const EdgeInsets.all(15.0),
@@ -158,9 +181,17 @@ class _LoginRouteState extends State<LoginRoute> {
     setState(() {
       username = usernameController.text;
       password = passwordController.text;
+
+      if (username == 'testuser' && password == '655321') {
+        if (_rememberMeSwitchVar) {
+          StartUpApp.setUsername(context, username);
+        } else {
+          StartUpApp.clearPref(context);
+        }
+        StartUpApp.setLogin(context, true);
+        Navigator.pushNamed(context, smsOtpRoute);
+      }
     });
-    // TODO: add login checks
-    print("$username -- $password");
   }
 
   Padding _paddingTextField(Widget widget) {
@@ -179,16 +210,18 @@ class _LoginRouteState extends State<LoginRoute> {
     );
   }
 
-  late String username;
-  late String password;
-  TextEditingController usernameController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
   Widget _usernameTextField() {
     return TextFormField(
       controller: usernameController,
       autofocus: true,
+      onTap: () {
+        usernameController = new TextEditingController();
+      },
       decoration: _textFormFieldDecoration(context,
           AppLocalizations.of(context)!.login_username_text_field_placeholder),
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9_]')),
+      ],
       onChanged: (value) {},
     );
   }
@@ -196,8 +229,13 @@ class _LoginRouteState extends State<LoginRoute> {
   Widget _passwordTextField() {
     return TextFormField(
       controller: passwordController,
+      keyboardType: TextInputType.number,
       decoration: _textFormFieldDecoration(context,
           AppLocalizations.of(context)!.login_password_text_field_placeholder),
+      inputFormatters: <TextInputFormatter>[
+        LengthLimitingTextInputFormatter(6),
+        FilteringTextInputFormatter.digitsOnly
+      ],
       onChanged: (value) {
         if (value.length == 6) {
           setState(

@@ -10,7 +10,19 @@ class Account extends StatefulWidget {
 class AccountState extends State<Account> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Scaffold(
+      body: Stack(
+        fit: StackFit.passthrough,
+        children: [
+          Text("asdasds"),
+          Center(
+            child: Image(image: AssetImage('assets/home/rocket.png')),
+          ),
+          Center(
+            child: Image(image: AssetImage('assets/home/image.png')),
+          ),
+        ],
+      ),
+    );
   }
 }
