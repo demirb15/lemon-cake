@@ -41,5 +41,17 @@
     "sendMoney_failurePrompt_fail":"Birşey yolunda gitmedi!",
     "sendMoney_successPrompt_backToEarth_button_title":"Dünyaya geri dön",
     "sendMoney_failurePrompt_tryAgain_button_title":"Terkrar Dene",
-    "sendMoney_failurePrompt_backToEarth_button_title":"Dünyaya geri dön"
+    "sendMoney_failurePrompt_backToEarth_button_title":"Dünyaya geri dön",
+    "month_1":"Oca",
+    "month_2":"Şub",
+    "month_3":"Mar",
+    "month_4":"Nis",
+    "month_5":"May",
+    "month_6":"Haz",
+    "month_7":"Tem",
+    "month_8":"Ağu",
+    "month_9":"Eyl",
+    "month_10":"Eki",
+    "month_11":"Kas",
+    "month_12":"Ara"
 }

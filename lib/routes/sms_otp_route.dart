@@ -4,9 +4,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_template/theme/appColors.dart';
+import 'package:flutter_template/widgets/pref_widget.dart';
 
 import 'custom_router.dart';
 
@@ -17,11 +17,15 @@ class SmsOtp extends StatefulWidget {
 }
 
 class _SmsOtpState extends State<SmsOtp> {
-  int _timeLeftInSeconds = 30;
+  int _timeLeftInSeconds = 300;
   bool _timeOut = false;
   String _timeLeftStr = '';
   _SmsOtpState() {
-    //_fooBar = false;
+    CustomPref().getLoginStatus().then((value) {
+      if (!value) {
+        Navigator.pushNamed(context, loginRoute);
+      }
+    });
     startTimer();
   }
   @override
@@ -35,10 +39,7 @@ class _SmsOtpState extends State<SmsOtp> {
             return IconButton(
               icon: Image.asset('assets/otp/icBack.png'),
               onPressed: () {
-                if (codeFieldController.text == "1111")
-                  Navigator.pushNamed(context, loginRoute);
-                else
-                  print(codeFieldController.text);
+                Navigator.pushNamed(context, loginRoute);
               },
             );
           },
@@ -153,17 +154,15 @@ class _SmsOtpState extends State<SmsOtp> {
   }
 
   void _loginButtonPressed() {
-    setState(() {
-      String _codeInput = codeFieldController.text;
-      if (_codeInput == '1111') {
-        _timer.cancel();
-        Navigator.pushNamed(context, homeRoute);
-      }
-    });
+    String _codeInput = codeFieldController.text;
+    if (_codeInput == '1111') {
+      _timer.cancel();
+      CustomPref().setOtpStatus(true);
+      Navigator.pushNamed(context, accountRoute);
+    }
   }
 
   bool _fooBar = false;
-  bool _success = false;
   AnimatedContainer _animatedTimerBarWhite() {
     return AnimatedContainer(
       height: 1,

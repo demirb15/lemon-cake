@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_template/main.dart';
 import 'package:flutter_template/theme/appColors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter_template/widgets/pref_widget.dart';
 import 'custom_router.dart';
 
 class LoginRoute extends StatefulWidget {
@@ -34,7 +34,6 @@ class _LoginRouteState extends State<LoginRoute> {
   String password = '';
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     Locale _locale = Localizations.localeOf(context);
@@ -159,10 +158,11 @@ class _LoginRouteState extends State<LoginRoute> {
   var _buttonTextColor = Colors.white24;
   Widget _loginButton() {
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.only(top: 10.0, left: 15, right: 15),
       child: Container(
-        constraints:
-            BoxConstraints.expand(width: double.infinity, height: 50.0),
+        constraints: BoxConstraints.expand(
+            width: double.infinity,
+            height: 50 * MediaQuery.of(context).size.height / 830),
         child: CupertinoButton(
           child: Text(
             AppLocalizations.of(context)!.login_login_button_title,
@@ -178,20 +178,19 @@ class _LoginRouteState extends State<LoginRoute> {
   }
 
   void _loginButtonPressed() {
-    setState(() {
-      username = usernameController.text;
-      password = passwordController.text;
-
-      if (username == 'testuser' && password == '655321') {
-        if (_rememberMeSwitchVar) {
-          StartUpApp.setUsername(context, username);
-        } else {
-          StartUpApp.clearPref(context);
-        }
-        StartUpApp.setLogin(context, true);
-        Navigator.pushNamed(context, smsOtpRoute);
+    username = usernameController.text;
+    password = passwordController.text;
+    //TODO: Set login cred to http call
+    //TODO: Remove remove clear pref for remember me switch
+    if (username == 'testuser' && password == '655321') {
+      if (_rememberMeSwitchVar) {
+        CustomPref().setUsername(username);
+      } else {
+        CustomPref().clearPref();
       }
-    });
+      CustomPref().setLoginStatus(true);
+      Navigator.pushNamed(context, smsOtpRoute);
+    }
   }
 
   Padding _paddingTextField(Widget widget) {

@@ -18,58 +18,18 @@ class StartUpApp extends StatefulWidget {
     state.setLocale(locale);
   }
 
-  static void clearPref(BuildContext context) {
+  static void switchTheme(BuildContext context) {
     _StartUpAppState state =
         context.findAncestorStateOfType<_StartUpAppState>()!;
-    state.clearPref();
+    state.switchTheme();
   }
 
-  static void setOtpStatus(BuildContext context, bool isOtpValid) {
+  static String getTheme(BuildContext context) {
     _StartUpAppState state =
         context.findAncestorStateOfType<_StartUpAppState>()!;
-    state.setOtpStatus(isOtpValid);
-  }
-
-  static bool getOtpStatus(BuildContext context) {
-    _StartUpAppState state =
-        context.findAncestorStateOfType<_StartUpAppState>()!;
-    bool statusOTP = false;
-    state.getOtpStatus().then((value) {
-      statusOTP = value;
-    });
-    return statusOTP;
-  }
-
-  static bool getLogin(BuildContext context) {
-    _StartUpAppState state =
-        context.findAncestorStateOfType<_StartUpAppState>()!;
-    bool loginStatus = false;
-    state.getLoginStatus().then((value) {
-      loginStatus = value;
-    });
-    return loginStatus;
-  }
-
-  static void setLogin(BuildContext context, bool isLoggedIn) {
-    _StartUpAppState state =
-        context.findAncestorStateOfType<_StartUpAppState>()!;
-    state.setLoginStatus(isLoggedIn);
-  }
-
-  static String getUsername(BuildContext context) {
-    _StartUpAppState state =
-        context.findAncestorStateOfType<_StartUpAppState>()!;
-    String _username = '';
-    state.getUsername().then((value) {
-      _username = value;
-    });
-    return _username;
-  }
-
-  static void setUsername(BuildContext context, String username) {
-    _StartUpAppState state =
-        context.findAncestorStateOfType<_StartUpAppState>()!;
-    state.setUsername(username);
+    String _temp = "";
+    _temp = state.currentTheme();
+    return _temp;
   }
 
   @override
@@ -78,6 +38,7 @@ class StartUpApp extends StatefulWidget {
 
 class _StartUpAppState extends State<StartUpApp> {
   Locale _locale = L10n.all.first;
+  ThemeMode _theme = ThemeMode.system;
   Future<void> setLocale(Locale locale) async {
     final _prefs = await SharedPreferences.getInstance();
     await _prefs.setString("languageCode", locale.languageCode);
@@ -86,48 +47,35 @@ class _StartUpAppState extends State<StartUpApp> {
     });
   }
 
-  Future<String> getUsername() async {
-    final _prefs = await SharedPreferences.getInstance();
-    String _username = _prefs.getString("username") ?? "";
-    return _username;
-  }
-
-  Future<void> setOtpStatus(bool isValidOtp) async {
-    final _prefs = await SharedPreferences.getInstance();
-    await _prefs.setBool("isOtpValid", isValidOtp);
-  }
-
-  Future<bool> getOtpStatus() async {
-    final _prefs = await SharedPreferences.getInstance();
-    bool _isOtpValid = _prefs.getBool("isLoggedIn") ?? false;
-    return _isOtpValid;
-  }
-
-  Future<void> setLoginStatus(bool isLoggedIn) async {
-    final _prefs = await SharedPreferences.getInstance();
-    await _prefs.setBool("isLoggedIn", isLoggedIn);
-  }
-
-  Future<bool> getLoginStatus() async {
-    final _prefs = await SharedPreferences.getInstance();
-    bool _loginStatus = _prefs.getBool("isLoggedIn") ?? false;
-    return _loginStatus;
-  }
-
   Future<Locale> getLocale() async {
     final _prefs = await SharedPreferences.getInstance();
     String _languageCode = _prefs.getString("languageCode") ?? 'en';
     return Locale(_languageCode);
   }
 
-  Future<void> setUsername(String username) async {
-    final _prefs = await SharedPreferences.getInstance();
-    await _prefs.setString("username", username);
+  String currentTheme() {
+    if (_theme == ThemeMode.dark) return "dark";
+    return "light";
   }
 
-  Future<void> clearPref() async {
+  Future<String> getTheme() async {
     final _prefs = await SharedPreferences.getInstance();
-    await _prefs.clear();
+    String _themeString = _prefs.getString("theme") ?? 'light';
+    //print(_themeString);
+    return _themeString;
+  }
+
+  Future<void> switchTheme() async {
+    final _prefs = await SharedPreferences.getInstance();
+    String _themeString = _prefs.getString("theme") ?? 'light';
+    String _newTheme = (_themeString == "dark") ? "light" : "dark";
+    await _prefs.setString("theme", _newTheme);
+    setState(() {
+      if (_newTheme == "dark")
+        _theme = ThemeMode.dark;
+      else
+        _theme = ThemeMode.light;
+    });
   }
 
   void loadPref() {
@@ -136,13 +84,18 @@ class _StartUpAppState extends State<StartUpApp> {
         this._locale = locale;
       });
     });
+    getTheme().then((value) {
+      setState(() {
+        this._theme = (value == "dark") ? ThemeMode.dark : ThemeMode.light;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     loadPref();
     return MaterialApp(
-      themeMode: ThemeMode.dark,
+      themeMode: _theme,
       theme: AppTheme.light(context),
       darkTheme: AppTheme.dark(context),
       localizationsDelegates: [
@@ -156,7 +109,7 @@ class _StartUpAppState extends State<StartUpApp> {
       onGenerateTitle: (BuildContext context) =>
           AppLocalizations.of(context)!.app_title,
       onGenerateRoute: CustomRouter.allRoutes,
-      initialRoute: loginRoute,
+      initialRoute: accountRoute,
     );
   }
 }
