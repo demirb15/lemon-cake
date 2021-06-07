@@ -21,23 +21,28 @@ const String notFoundRoute = 'notFound';
 //router that navigates to other pages
 class CustomRouter {
   static Route<dynamic> allRoutes(RouteSettings settings) {
+    //print(settings.arguments);
     switch (settings.name) {
       case homeRoute:
         return MaterialPageRoute(builder: (_) => HomePage());
       case loginRoute:
-        return MaterialPageRoute(builder: (_) => LoginRoute());
+        return MaterialPageRoute(
+            builder: (_) => LoginRoute(), settings: settings);
       case smsOtpRoute:
-        return MaterialPageRoute(builder: (_) => SmsOtp());
+        return MaterialPageRoute(builder: (_) => SmsOtp(), settings: settings);
       case accountRoute:
-        return MaterialPageRoute(builder: (_) => Account());
+        return MaterialPageRoute(builder: (_) => Account(), settings: settings);
       case filterRoute:
-        return MaterialPageRoute(builder: (_) => Filter());
+        return MaterialPageRoute(builder: (_) => Filter(), settings: settings);
       case accountDetailsRoute:
-        return MaterialPageRoute(builder: (_) => AccountDetails());
+        return MaterialPageRoute(
+            builder: (_) => AccountDetails(), settings: settings);
       case sendMoneyRoute:
-        return MaterialPageRoute(builder: (_) => SendMoney());
+        return MaterialPageRoute(
+            builder: (_) => SendMoney(), settings: settings);
       default:
-        return MaterialPageRoute(builder: (_) => NotFound());
+        return MaterialPageRoute(
+            builder: (_) => NotFound(), settings: settings);
     }
   }
 }

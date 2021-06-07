@@ -38,7 +38,7 @@ class AppTheme {
   static ThemeData dark(BuildContext context) {
     return ThemeData(
       cardColor: AppColors.twilight,
-      scaffoldBackgroundColor: AppColors.dusk,
+      scaffoldBackgroundColor: AppColors.dark,
       primaryColor: AppColors.darkPeriwinkle,
       dividerColor: AppColors.seafoamBlue,
       accentColor: AppColors.darkPeriwinkleTwo,

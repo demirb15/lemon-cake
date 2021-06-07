@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_template/l10n/L10n.dart';
 import 'package:flutter_template/theme/theme.dart';
 import 'package:flutter_template/routes/custom_router.dart';
+import 'package:flutter_template/widgets/pref_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -18,12 +19,32 @@ class StartUpApp extends StatefulWidget {
     state.setLocale(locale);
   }
 
+  static void switchTheme(BuildContext context) {
+    _StartUpAppState state =
+        context.findAncestorStateOfType<_StartUpAppState>()!;
+    state.switchTheme();
+  }
+
+  static String getTheme(BuildContext context) {
+    _StartUpAppState state =
+        context.findAncestorStateOfType<_StartUpAppState>()!;
+    String _temp = "";
+    _temp = state.currentTheme();
+    return _temp;
+  }
+
   @override
   _StartUpAppState createState() => _StartUpAppState();
 }
 
 class _StartUpAppState extends State<StartUpApp> {
   Locale _locale = L10n.all.first;
+  ThemeMode _theme = ThemeMode.system;
+  _StartUpAppState() {
+    loadPref();
+    CustomPref().setLoginStatus(false);
+    CustomPref().setOtpStatus(false);
+  }
   Future<void> setLocale(Locale locale) async {
     final _prefs = await SharedPreferences.getInstance();
     await _prefs.setString("languageCode", locale.languageCode);
@@ -38,19 +59,48 @@ class _StartUpAppState extends State<StartUpApp> {
     return Locale(_languageCode);
   }
 
+  String currentTheme() {
+    if (_theme == ThemeMode.dark) return "dark";
+    return "light";
+  }
+
+  Future<String> getTheme() async {
+    final _prefs = await SharedPreferences.getInstance();
+    String _themeString = _prefs.getString("theme") ?? 'light';
+    //print(_themeString);
+    return _themeString;
+  }
+
+  Future<void> switchTheme() async {
+    final _prefs = await SharedPreferences.getInstance();
+    String _themeString = _prefs.getString("theme") ?? 'light';
+    String _newTheme = (_themeString == "dark") ? "light" : "dark";
+    await _prefs.setString("theme", _newTheme);
+    setState(() {
+      if (_newTheme == "dark")
+        _theme = ThemeMode.dark;
+      else
+        _theme = ThemeMode.light;
+    });
+  }
+
   void loadPref() {
     getLocale().then((locale) {
       setState(() {
         this._locale = locale;
       });
     });
+    getTheme().then((value) {
+      setState(() {
+        this._theme = (value == "dark") ? ThemeMode.dark : ThemeMode.light;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    loadPref();
     return MaterialApp(
-      themeMode: ThemeMode.dark,
+      themeMode: _theme,
       theme: AppTheme.light(context),
       darkTheme: AppTheme.dark(context),
       localizationsDelegates: [
