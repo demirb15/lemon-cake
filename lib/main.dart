@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_template/l10n/L10n.dart';
 import 'package:flutter_template/theme/theme.dart';
 import 'package:flutter_template/routes/custom_router.dart';
+import 'package:flutter_template/widgets/pref_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -39,6 +40,11 @@ class StartUpApp extends StatefulWidget {
 class _StartUpAppState extends State<StartUpApp> {
   Locale _locale = L10n.all.first;
   ThemeMode _theme = ThemeMode.system;
+  _StartUpAppState() {
+    loadPref();
+    CustomPref().setLoginStatus(false);
+    CustomPref().setOtpStatus(false);
+  }
   Future<void> setLocale(Locale locale) async {
     final _prefs = await SharedPreferences.getInstance();
     await _prefs.setString("languageCode", locale.languageCode);
@@ -93,7 +99,6 @@ class _StartUpAppState extends State<StartUpApp> {
 
   @override
   Widget build(BuildContext context) {
-    loadPref();
     return MaterialApp(
       themeMode: _theme,
       theme: AppTheme.light(context),
@@ -109,7 +114,7 @@ class _StartUpAppState extends State<StartUpApp> {
       onGenerateTitle: (BuildContext context) =>
           AppLocalizations.of(context)!.app_title,
       onGenerateRoute: CustomRouter.allRoutes,
-      initialRoute: accountRoute,
+      initialRoute: loginRoute,
     );
   }
 }

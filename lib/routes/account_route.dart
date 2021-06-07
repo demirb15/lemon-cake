@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -7,11 +6,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_template/main.dart';
 import 'package:flutter_template/theme/appColors.dart';
 import 'package:flutter_template/widgets/account_items.dart';
+import 'package:flutter_template/widgets/currency.dart';
+import 'package:flutter_template/widgets/http_service.dart';
 import 'package:flutter_template/widgets/month_ser.dart';
 import 'package:flutter_template/widgets/pref_widget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'custom_router.dart';
-import 'package:http/http.dart' as http;
 
 class Account extends StatefulWidget {
   Account({Key? key}) : super(key: key); //
@@ -21,68 +21,56 @@ class Account extends StatefulWidget {
 
 class _AccountState extends State<Account> {
   String _theme = "dark";
+  String _filterType = Currency().currencies()[0];
   _AccountState() {
     _monthlyBalances = [];
     _setBalance();
     _setMontlyBalance();
+
     CustomPref().getLoginStatus().then((value) {
-      if (!value) Navigator.pushNamed(context, loginRoute);
+      if (!value)
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            loginRoute, (Route<dynamic> route) => false);
     });
     CustomPref().getOtpStatus().then((value) {
-      if (!value) Navigator.pushNamed(context, loginRoute);
+      if (!value)
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            loginRoute, (Route<dynamic> route) => false);
     });
   }
-  Future<http.Response> fetchAccount() {
-    return http.get(Uri.parse('https://rocketbank.commencis.com/accounts'));
-  }
 
-  RegExp _reg = new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
   void _setMontlyBalance() {
-    fetchAccount().then((value) {
-      var _temp = jsonDecode(value.body);
-      String _fullMonthlyBalances = _temp["monthlyAvailableBalance"].toString();
-
-      _fullMonthlyBalances =
-          _fullMonthlyBalances.substring(1, _fullMonthlyBalances.length - 1);
-      List<String> _stringListBalances = _fullMonthlyBalances.split(', ');
-
+    HttpService().getBalanceMonthly().then((value) {
       setState(() {
-        _monthlyBalances = _stringListBalances.map(int.parse).toList();
+        _monthlyBalances = value;
         _isGraphLoaded = true;
       });
     });
   }
 
   void _setBalance() {
-    fetchAccount().then((value) {
-      var _temp = jsonDecode(value.body);
-      String _fullBalanceString = _temp["availableBalance"].toString();
-      List<String> _parts = _fullBalanceString.split(",");
-      late String _whole, _decimal;
-      if (_parts.length == 1) {
-        _whole = _parts[0];
-        _decimal = "00";
-      } else {
-        _whole = _parts[0];
-        _decimal = _parts[1];
-      }
-      _whole = _whole.replaceAllMapped(_reg, (match) => '${match[1]},');
-      _whole = _whole.replaceAll(',', '.');
+    HttpService().getBalance().then((value) {
       setState(() {
-        _balance = _whole + ',' + _decimal;
-        _balance += " " + _temp["availableBalanceCurrency"].toString();
+        _balance = value;
         _isBalanceLoaded = true;
       });
     });
   }
 
-  //Function _deliminatorFunc = (Match match) => '${match[1]},';
   String _balance = '';
   bool _isBalanceLoaded = false;
   bool _isGraphLoaded = false;
+  late var _arguments;
   late List<int> _monthlyBalances;
   @override
   Widget build(BuildContext context) {
+    if (ModalRoute.of(context)!.settings.arguments != null) {
+      setState(() {
+        _arguments = ModalRoute.of(context)!.settings.arguments as Map;
+        _filterType = _arguments['currency'];
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.account_navigationBar_title),
@@ -91,10 +79,27 @@ class _AccountState extends State<Account> {
           Builder(
             builder: (BuildContext context) {
               return IconButton(
-                icon: Image.asset(
-                    'assets/accounts/$_theme/darkThemeIconsFilter.png'),
+                icon: Stack(
+                  fit: StackFit.passthrough,
+                  children: <Widget>[
+                    Container(),
+                    Positioned(
+                      left: 5,
+                      top: 10,
+                      child: Image.asset(
+                          'assets/accounts/$_theme/darkThemeIconsFilter.png'),
+                    ),
+                    Positioned(
+                      left: 5,
+                      top: 10,
+                      child: _isFilterOn(),
+                    ),
+                  ],
+                ),
                 onPressed: () {
-                  Navigator.pushNamed(context, filterRoute);
+                  int index = Currency().currencies().indexOf(_filterType);
+                  Navigator.pushNamed(context, filterRoute,
+                      arguments: {'index': index});
                 },
               );
             },
@@ -128,6 +133,22 @@ class _AccountState extends State<Account> {
     );
   }
 
+  Widget _isFilterOn() {
+    bool _isOn = (_filterType == Currency().currencies()[0]);
+    return _isOn
+        ? Container()
+        : Container(
+            width: 8,
+            height: 8,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(5),
+              ),
+              color: Colors.red,
+            ),
+          );
+  }
+
   Column _accountColumn() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -138,7 +159,7 @@ class _AccountState extends State<Account> {
           padding: EdgeInsets.only(top: 30, left: 15, right: 15),
           child: Container(
             constraints: BoxConstraints(
-              minWidth: double.infinity, //TODO
+              minWidth: double.infinity,
             ),
             child: _slidingCards(),
           ),
@@ -292,7 +313,7 @@ class _AccountState extends State<Account> {
       color: AppColors.twilight,
       onPressed: () {
         Navigator.pushNamed(context, accountDetailsRoute,
-            arguments: {'id': id});
+            arguments: {'id': id, 'accountType': name});
       },
       child: Row(
         children: [
@@ -352,16 +373,20 @@ class _AccountState extends State<Account> {
 
   Widget _itemTiles() {
     List<Widget> _listTemp = [];
-    fetchAccount().then(
+
+    HttpService().getBalanceItems().then(
       (value) {
-        Iterable _temp = jsonDecode(value.body)["items"] as List;
-        List<AccountItems> _accountItems = List<AccountItems>.from(
-            _temp.map((model) => AccountItems.fromJson(model)));
+        List<AccountItems> _accountItems = value;
         for (var i = 0; i < _accountItems.length; i++) {
           if (_searchFieldControler.text != "") {
             if (!_accountItems[i].name.contains(_searchFieldControler.text))
               continue;
           }
+          if (_filterType != Currency().currencies()[0]) {
+            if (_accountItems[i].currency.toUpperCase() != _filterType)
+              continue;
+          }
+
           _listTemp.add(_tileButton(
               int.parse(_accountItems[i].id),
               "${_accountItems[i].name}",

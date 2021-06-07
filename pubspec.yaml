@@ -19,6 +19,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   carousel_slider: ^4.0.0-nullsafety.0
   http: ^0.13.3
+  share: ^2.0.4
+  image_picker: ^0.8.0
   
 dev_dependencies:
   flutter_test:
@@ -40,6 +42,8 @@ flutter:
    - assets/otp/
    - assets/accounts/dark/
    - assets/accounts/light/
+   - assets/filter/
+   - assets/account_details/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -22,9 +22,9 @@ class _SmsOtpState extends State<SmsOtp> {
   String _timeLeftStr = '';
   _SmsOtpState() {
     CustomPref().getLoginStatus().then((value) {
-      if (!value) {
-        Navigator.pushNamed(context, loginRoute);
-      }
+      if (!value)
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            loginRoute, (Route<dynamic> route) => false);
     });
     startTimer();
   }
@@ -39,7 +39,7 @@ class _SmsOtpState extends State<SmsOtp> {
             return IconButton(
               icon: Image.asset('assets/otp/icBack.png'),
               onPressed: () {
-                Navigator.pushNamed(context, loginRoute);
+                Navigator.pushReplacementNamed(context, loginRoute);
               },
             );
           },
@@ -158,7 +158,7 @@ class _SmsOtpState extends State<SmsOtp> {
     if (_codeInput == '1111') {
       _timer.cancel();
       CustomPref().setOtpStatus(true);
-      Navigator.pushNamed(context, accountRoute);
+      Navigator.pushReplacementNamed(context, accountRoute);
     }
   }
 
@@ -285,7 +285,7 @@ class _SmsOtpState extends State<SmsOtp> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pushNamed(context, accountRoute);
+              Navigator.pushReplacementNamed(context, accountRoute);
             },
             //TODO: otp sms error message
             child: Text(

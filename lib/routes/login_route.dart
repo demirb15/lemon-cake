@@ -189,7 +189,7 @@ class _LoginRouteState extends State<LoginRoute> {
         CustomPref().clearPref();
       }
       CustomPref().setLoginStatus(true);
-      Navigator.pushNamed(context, smsOtpRoute);
+      Navigator.pushReplacementNamed(context, smsOtpRoute);
     }
   }
 
