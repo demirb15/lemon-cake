@@ -31,10 +31,11 @@ class _AccountDetailsState extends State<AccountDetails> {
 
   bool _initilized = false;
   String _accountType = "";
+  late var _arguments;
   @override
   Widget build(BuildContext context) {
     if (!_initilized) {
-      final _arguments = ModalRoute.of(context)!.settings.arguments as Map;
+      _arguments = ModalRoute.of(context)!.settings.arguments as Map;
       setState(() {
         _accountType = _arguments['accountType'] as String;
         _accountType = _accountType.capitalize();
@@ -103,7 +104,6 @@ class _AccountDetailsState extends State<AccountDetails> {
                 children: [
                   Image.asset(
                       'assets/account_details/iconsAvatarPlaceholder.png'),
-                  //TODO: add button to change user image,
                 ],
               )),
           Expanded(
@@ -272,7 +272,7 @@ class _AccountDetailsState extends State<AccountDetails> {
             AppLocalizations.of(context)!.accountDetail_send_money_button_title,
           ),
           onPressed: () {
-            Navigator.pushNamed(context, sendMoneyRoute);
+            Navigator.pushNamed(context, sendMoneyRoute, arguments: _arguments);
           },
           color: AppColors.darkPeriwinkle,
           disabledColor: AppColors.darkPeriwinkle,

@@ -19,14 +19,12 @@ class StartUpApp extends StatefulWidget {
     state.setLocale(locale);
   }
 
-  static void getCountryCode(BuildContext context) {
+  static Future<String> getCountryCode(BuildContext context) async {
     _StartUpAppState state =
         context.findAncestorStateOfType<_StartUpAppState>()!;
-    Locale temp;
-    state.getLocale().then((value) {
-      temp = value;
-      return temp;
-    });
+    Locale temp = await state.getLocale();
+
+    return temp.countryCode.toString();
   }
 
   static void switchTheme(BuildContext context) {

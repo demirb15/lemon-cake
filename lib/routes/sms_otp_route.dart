@@ -287,7 +287,6 @@ class _SmsOtpState extends State<SmsOtp> {
             onPressed: () {
               Navigator.pushReplacementNamed(context, accountRoute);
             },
-            //TODO: otp sms error message
             child: Text(
               "Go Back to login",
               style: TextStyle(fontSize: 20),
