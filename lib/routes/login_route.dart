@@ -129,7 +129,9 @@ class _LoginRouteState extends State<LoginRoute> {
   }
 
   void _switchLanguage(_) {
-    Locale temp = Locale(_!.languageCode);
+    var _index = L10n.all
+        .indexWhere((element) => element.languageCode == _.languageCode);
+    Locale temp = L10n.all[_index];
     StartUpApp.setLocale(context, temp);
   }
 
@@ -180,8 +182,6 @@ class _LoginRouteState extends State<LoginRoute> {
   void _loginButtonPressed() {
     username = usernameController.text;
     password = passwordController.text;
-    //TODO: Set login cred to http call
-    //TODO: Remove remove clear pref for remember me switch
     if (username == 'testuser' && password == '655321') {
       if (_rememberMeSwitchVar) {
         CustomPref().setUsername(username);
