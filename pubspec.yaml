@@ -46,6 +46,8 @@ flutter:
    - assets/filter/
    - assets/account_details/
    - assets/send_money/
+   - assets/send_money/success/
+   - assets/send_money/fail/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -21,6 +23,7 @@ class _SendMoneyState extends State<SendMoney> {
   }
   late AccountDetailItems _accountDetailItems;
   String _accountType = "";
+  bool _blured = false;
   @override
   Widget build(BuildContext context) {
     if (!_isInitilized) {
@@ -42,31 +45,74 @@ class _SendMoneyState extends State<SendMoney> {
     }
     return !_isInitilized
         ? Scaffold()
-        : Scaffold(
-            appBar: AppBar(
-              title: Text(
-                  AppLocalizations.of(context)!.sendMoney_navigationBar_title),
-              centerTitle: true,
-              leading: Builder(
-                builder: (BuildContext context) {
-                  return IconButton(
-                    icon: Container(
-                      child: Stack(
-                        fit: StackFit.passthrough,
-                        children: [
-                          Image.asset('assets/send_money/icBack.png'),
-                        ],
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
+        : Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              Scaffold(
+                appBar: AppBar(
+                  title: Text(AppLocalizations.of(context)!
+                      .sendMoney_navigationBar_title),
+                  centerTitle: true,
+                  leading: Builder(
+                    builder: (BuildContext context) {
+                      return IconButton(
+                        icon: Container(
+                          child: Stack(
+                            fit: StackFit.passthrough,
+                            children: [
+                              Image.asset('assets/send_money/icBack.png'),
+                            ],
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      );
                     },
-                  );
-                },
+                  ),
+                ),
+                body: _sendMoneyColumn(),
               ),
-            ),
-            body: _sendMoneyColumn(),
+              _bluredContent(),
+            ],
           );
+  }
+
+  Widget _bluredContent() {
+    if (_blured) {
+      return Positioned.fill(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: 2.0,
+            sigmaY: 2.0,
+          ),
+          child: Column(
+            children: <Widget>[
+              Expanded(child: Container()),
+              Container(
+                color: Colors.white,
+                child: Column(
+                  children: <Widget>[
+                    Text(AppLocalizations.of(context)!
+                        .sendMoney_successPrompt_success),
+                    CupertinoButton(
+                      child: Text("asd"),
+                      onPressed: () {
+                        setState(() {
+                          _blured = false;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Container();
   }
 
   TextStyle _textStyleMain(double fontsize) {
@@ -108,7 +154,7 @@ class _SendMoneyState extends State<SendMoney> {
         Expanded(
           child: Container(),
         ),
-        _sendMoneyButton(),
+        _buttonDecoration(_sendMoneyButton()),
       ],
     );
   }
@@ -201,27 +247,34 @@ class _SendMoneyState extends State<SendMoney> {
     );
   }
 
-  Widget _sendMoneyButton() {
+  Widget _buttonDecoration(Widget w) {
     return Padding(
       padding: const EdgeInsets.all(15),
       child: Container(
         constraints: BoxConstraints.expand(
             width: double.infinity,
             height: 50 * MediaQuery.of(context).size.height / 830),
-        child: CupertinoButton(
-          child: Text(
-            AppLocalizations.of(context)!.sendMoney_send_money_button_title,
-          ),
-          onPressed: () {
-            print(ibanEditingController.text);
-            print(recipentDetailcontroler.text);
-            print(amountFieldControler.text);
-          },
-          color: AppColors.darkPeriwinkle,
-          disabledColor: AppColors.darkPeriwinkle,
-          borderRadius: BorderRadius.all(Radius.circular(8.0)),
-        ),
+        child: w,
       ),
+    );
+  }
+
+  Widget _sendMoneyButton() {
+    return CupertinoButton(
+      child: Text(
+        AppLocalizations.of(context)!.sendMoney_send_money_button_title,
+      ),
+      onPressed: () {
+        /* print(ibanEditingController.text);
+        print(recipentDetailcontroler.text);
+        print(amountFieldControler.text); */
+        setState(() {
+          _blured = true;
+        });
+      },
+      color: AppColors.darkPeriwinkle,
+      disabledColor: AppColors.darkPeriwinkle,
+      borderRadius: BorderRadius.all(Radius.circular(8.0)),
     );
   }
 }
