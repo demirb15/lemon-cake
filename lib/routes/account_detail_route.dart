@@ -28,6 +28,7 @@ class _AccountDetailsState extends State<AccountDetails> {
       if (!value) Navigator.pushNamed(context, loginRoute);
     });
   }
+
   bool _initilized = false;
   String _accountType = "";
   @override
