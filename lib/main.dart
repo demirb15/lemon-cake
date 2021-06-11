@@ -19,6 +19,14 @@ class StartUpApp extends StatefulWidget {
     state.setLocale(locale);
   }
 
+  static Future<String> getCountryCode(BuildContext context) async {
+    _StartUpAppState state =
+        context.findAncestorStateOfType<_StartUpAppState>()!;
+    Locale temp = await state.getLocale();
+
+    return temp.countryCode.toString();
+  }
+
   static void switchTheme(BuildContext context) {
     _StartUpAppState state =
         context.findAncestorStateOfType<_StartUpAppState>()!;
@@ -55,8 +63,12 @@ class _StartUpAppState extends State<StartUpApp> {
 
   Future<Locale> getLocale() async {
     final _prefs = await SharedPreferences.getInstance();
+
     String _languageCode = _prefs.getString("languageCode") ?? 'en';
-    return Locale(_languageCode);
+    var _index =
+        L10n.all.indexWhere((element) => element.languageCode == _languageCode);
+    Locale temp = L10n.all[_index];
+    return temp;
   }
 
   String currentTheme() {
@@ -103,6 +115,7 @@ class _StartUpAppState extends State<StartUpApp> {
       themeMode: _theme,
       theme: AppTheme.light(context),
       darkTheme: AppTheme.dark(context),
+      debugShowCheckedModeBanner: false,
       localizationsDelegates: [
         AppLocalizations.delegate, // Add this line
         GlobalMaterialLocalizations.delegate,

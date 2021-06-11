@@ -17,7 +17,9 @@ class AppTheme {
         actionsIconTheme: IconThemeData(color: Colors.black),
         textTheme: TextTheme(
           headline6: TextStyle(
-              color: Colors.black, fontSize: 17, fontWeight: FontWeight.w500),
+              color: AppColors.darkPeriwinkle,
+              fontSize: 17,
+              fontWeight: FontWeight.w500),
         ),
       ),
       buttonTheme: ButtonThemeData(

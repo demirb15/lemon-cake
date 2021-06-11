@@ -23,7 +23,6 @@ class _HomePageState extends State<HomePage> {
             child: Image(image: AssetImage('assets/home/image.png')),
           ),
           Positioned(
-            // TODO remove this and add "with WidgetsBindingObserver" to detect when is app foreground ornot
             bottom: 50,
             left: 50,
             right: 50,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_template/main.dart';
 import 'package:flutter_template/theme/appColors.dart';
 import 'package:flutter_template/widgets/account_detail_items.dart';
 import 'package:flutter_template/widgets/http_service.dart';
@@ -28,12 +29,16 @@ class _AccountDetailsState extends State<AccountDetails> {
       if (!value) Navigator.pushNamed(context, loginRoute);
     });
   }
+
   bool _initilized = false;
   String _accountType = "";
+  String _theme = "dark";
+  late var _arguments;
   @override
   Widget build(BuildContext context) {
+    _theme = StartUpApp.getTheme(context);
     if (!_initilized) {
-      final _arguments = ModalRoute.of(context)!.settings.arguments as Map;
+      _arguments = ModalRoute.of(context)!.settings.arguments as Map;
       setState(() {
         _accountType = _arguments['accountType'] as String;
         _accountType = _accountType.capitalize();
@@ -59,7 +64,8 @@ class _AccountDetailsState extends State<AccountDetails> {
                       child: Stack(
                         fit: StackFit.passthrough,
                         children: [
-                          Image.asset('assets/account_details/icBack.png'),
+                          Image.asset(
+                              'assets/account_details/$_theme/icBack.png'),
                         ],
                       ),
                     ),
@@ -101,8 +107,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                 fit: StackFit.passthrough,
                 children: [
                   Image.asset(
-                      'assets/account_details/iconsAvatarPlaceholder.png'),
-                  //TODO: add button to change user image,
+                      'assets/account_details/$_theme/iconsAvatarPlaceholder.png'),
                 ],
               )),
           Expanded(
@@ -249,7 +254,7 @@ class _AccountDetailsState extends State<AccountDetails> {
           ),
           Expanded(child: Container()),
           IconButton(
-            icon: Image.asset('assets/account_details/iconsShare.png'),
+            icon: Image.asset('assets/account_details/$_theme/iconsShare.png'),
             onPressed: () {
               Share.share('${_accountDetailItem.iban}');
             },
@@ -271,7 +276,7 @@ class _AccountDetailsState extends State<AccountDetails> {
             AppLocalizations.of(context)!.accountDetail_send_money_button_title,
           ),
           onPressed: () {
-            Navigator.pushNamed(context, sendMoneyRoute);
+            Navigator.pushNamed(context, sendMoneyRoute, arguments: _arguments);
           },
           color: AppColors.darkPeriwinkle,
           disabledColor: AppColors.darkPeriwinkle,

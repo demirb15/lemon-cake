@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_template/widgets/account_detail_items.dart';
 import 'package:http/http.dart' as http;
 
@@ -64,5 +63,12 @@ class HttpService {
     var _body = jsonDecode(_httpResponse.body);
     AccountDetailItems _accountDetailItem = AccountDetailItems.fromJson(_body);
     return _accountDetailItem;
+  }
+
+  Future<void> updateBalance(int id, double amount) async {
+    /*final _url = Uri.parse("${_jsonUrl}accountDetail?id=$id");
+    final headers = {"Content-type": "application/json"};
+    final json = '{"amount": "$amount"}';
+    await http.patch(_url, headers: headers, body: json);*/
   }
 }

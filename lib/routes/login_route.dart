@@ -32,10 +32,13 @@ class _LoginRouteState extends State<LoginRoute> {
 
   String username = '';
   String password = '';
+  String _theme = "dark";
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    _theme = StartUpApp.getTheme(context);
+
     Locale _locale = Localizations.localeOf(context);
     return Scaffold(
       appBar: AppBar(
@@ -96,25 +99,28 @@ class _LoginRouteState extends State<LoginRoute> {
           fit: StackFit.passthrough,
           children: [
             Image(
-              image: AssetImage('assets/login/stars.png'),
+              image: AssetImage('assets/login/$_theme/stars.png'),
               fit: BoxFit.fitWidth,
             ),
             Positioned(
                 top: 85,
                 left: 23,
                 right: 157,
-                child: Image(image: AssetImage('assets/login/balloonBig.png'))),
+                child: Image(
+                    image: AssetImage('assets/login/$_theme/balloonBig.png'))),
             Positioned(
                 top: 110,
                 left: 180,
                 right: 31,
-                child:
-                    Image(image: AssetImage('assets/login/balloonSmall.png'))),
+                child: Image(
+                    image:
+                        AssetImage('assets/login/$_theme/balloonSmall.png'))),
             Positioned(
                 top: 154,
                 left: 106,
                 right: 109,
-                child: Image(image: AssetImage('assets/login/rocket.png'))),
+                child: Image(
+                    image: AssetImage('assets/login/$_theme/rocket.png'))),
           ],
         ),
         Expanded(
@@ -129,7 +135,9 @@ class _LoginRouteState extends State<LoginRoute> {
   }
 
   void _switchLanguage(_) {
-    Locale temp = Locale(_!.languageCode);
+    var _index = L10n.all
+        .indexWhere((element) => element.languageCode == _.languageCode);
+    Locale temp = L10n.all[_index];
     StartUpApp.setLocale(context, temp);
   }
 
@@ -180,8 +188,6 @@ class _LoginRouteState extends State<LoginRoute> {
   void _loginButtonPressed() {
     username = usernameController.text;
     password = passwordController.text;
-    //TODO: Set login cred to http call
-    //TODO: Remove remove clear pref for remember me switch
     if (username == 'testuser' && password == '655321') {
       if (_rememberMeSwitchVar) {
         CustomPref().setUsername(username);
