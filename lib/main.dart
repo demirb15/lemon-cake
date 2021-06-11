@@ -115,6 +115,7 @@ class _StartUpAppState extends State<StartUpApp> {
       themeMode: _theme,
       theme: AppTheme.light(context),
       darkTheme: AppTheme.dark(context),
+      debugShowCheckedModeBanner: false,
       localizationsDelegates: [
         AppLocalizations.delegate, // Add this line
         GlobalMaterialLocalizations.delegate,
