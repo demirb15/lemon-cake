@@ -70,7 +70,7 @@ class _AccountState extends State<Account> {
         _filterType = _arguments['currency'];
       });
     }
-
+    _theme = StartUpApp.getTheme(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.account_navigationBar_title),

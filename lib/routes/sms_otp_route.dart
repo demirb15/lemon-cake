@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_template/theme/appColors.dart';
 import 'package:flutter_template/widgets/pref_widget.dart';
 
+import '../main.dart';
 import 'custom_router.dart';
 
 class SmsOtp extends StatefulWidget {
@@ -28,8 +29,11 @@ class _SmsOtpState extends State<SmsOtp> {
     });
     startTimer();
   }
+  String _theme = "dark";
   @override
   Widget build(BuildContext context) {
+    _theme = StartUpApp.getTheme(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.otp_navigationBar_title),
@@ -37,8 +41,9 @@ class _SmsOtpState extends State<SmsOtp> {
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
-              icon: Image.asset('assets/otp/icBack.png'),
+              icon: Image.asset('assets/otp/$_theme/icBack.png'),
               onPressed: () {
+                _timer.cancel();
                 Navigator.pushReplacementNamed(context, loginRoute);
               },
             );
@@ -155,7 +160,8 @@ class _SmsOtpState extends State<SmsOtp> {
 
   void _loginButtonPressed() {
     String _codeInput = codeFieldController.text;
-    if (_codeInput == '1111') {
+
+    if (_codeInput == '1111' && _timer.isActive) {
       _timer.cancel();
       CustomPref().setOtpStatus(true);
       Navigator.pushReplacementNamed(context, accountRoute);
@@ -187,7 +193,7 @@ class _SmsOtpState extends State<SmsOtp> {
 
   AnimatedPositioned _animatedtimerIcon() {
     return AnimatedPositioned(
-      child: Image.asset("assets/otp/barProgressCiricle.png"),
+      child: Image.asset("assets/otp/$_theme/barProgressCiricle.png"),
       duration: Duration(seconds: _timeLeftInSeconds),
       right: !_fooBar ? 35 : MediaQuery.of(context).size.width - 50,
       top: 256,

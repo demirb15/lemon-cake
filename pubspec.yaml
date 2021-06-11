@@ -39,13 +39,24 @@ flutter:
   assets:
    - assets/
    - assets/login/
+   - assets/login/dark/
+   - assets/login/light/
    - assets/home/
    - assets/otp/
+   - assets/otp/dark/
+   - assets/otp/light/
+   - assets/accounts/
    - assets/accounts/dark/
    - assets/accounts/light/
    - assets/filter/
+   - assets/filter/dark/
+   - assets/filter/light/
    - assets/account_details/
+   - assets/account_details/dark/
+   - assets/account_details/light/
    - assets/send_money/
+   - assets/send_money/dark/
+   - assets/send_money/light/
    - assets/send_money/success/
    - assets/send_money/fail/
 

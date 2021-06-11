@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_template/main.dart';
 import 'package:flutter_template/theme/appColors.dart';
 import 'package:flutter_template/widgets/account_detail_items.dart';
 import 'package:flutter_template/widgets/http_service.dart';
@@ -31,9 +32,11 @@ class _AccountDetailsState extends State<AccountDetails> {
 
   bool _initilized = false;
   String _accountType = "";
+  String _theme = "dark";
   late var _arguments;
   @override
   Widget build(BuildContext context) {
+    _theme = StartUpApp.getTheme(context);
     if (!_initilized) {
       _arguments = ModalRoute.of(context)!.settings.arguments as Map;
       setState(() {
@@ -61,7 +64,8 @@ class _AccountDetailsState extends State<AccountDetails> {
                       child: Stack(
                         fit: StackFit.passthrough,
                         children: [
-                          Image.asset('assets/account_details/icBack.png'),
+                          Image.asset(
+                              'assets/account_details/$_theme/icBack.png'),
                         ],
                       ),
                     ),
@@ -103,7 +107,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                 fit: StackFit.passthrough,
                 children: [
                   Image.asset(
-                      'assets/account_details/iconsAvatarPlaceholder.png'),
+                      'assets/account_details/$_theme/iconsAvatarPlaceholder.png'),
                 ],
               )),
           Expanded(
@@ -250,7 +254,7 @@ class _AccountDetailsState extends State<AccountDetails> {
           ),
           Expanded(child: Container()),
           IconButton(
-            icon: Image.asset('assets/account_details/iconsShare.png'),
+            icon: Image.asset('assets/account_details/$_theme/iconsShare.png'),
             onPressed: () {
               Share.share('${_accountDetailItem.iban}');
             },

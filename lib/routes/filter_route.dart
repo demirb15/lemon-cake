@@ -5,6 +5,7 @@ import 'package:flutter_template/widgets/month_ser.dart';
 import 'package:flutter_template/widgets/pref_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_template/widgets/currency.dart';
+import '../main.dart';
 import 'custom_router.dart';
 
 class Filter extends StatefulWidget {
@@ -37,13 +38,16 @@ class _FilterState extends State<Filter> {
             loginRoute, (Route<dynamic> route) => false);
     });
   }
-
+  String _theme = "dark";
   @override
   Widget build(BuildContext context) {
+    _theme = StartUpApp.getTheme(context);
+
     final _arguments = ModalRoute.of(context)!.settings.arguments as Map;
     if (_activeIndex == 0 && !_reseted) {
       _activeIndex = _arguments['index'];
     }
+
     _currencyIsActive[_activeIndex] = true;
     return Scaffold(
       appBar: AppBar(
@@ -56,8 +60,9 @@ class _FilterState extends State<Filter> {
                 child: Stack(
                   fit: StackFit.passthrough,
                   children: [
-                    Image.asset('assets/filter/icClose.png'),
-                    Image.asset('assets/filter/darkThemeIconsCross.png'),
+                    Image.asset('assets/filter/$_theme/icClose.png'),
+                    Image.asset(
+                        'assets/filter/$_theme/darkThemeIconsCross.png'),
                   ],
                 ),
               ),
@@ -94,6 +99,10 @@ class _FilterState extends State<Filter> {
             AppLocalizations.of(context)!.filter_currency,
             style: TextStyle(
               fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: (_theme == "dark")
+                  ? Colors.white
+                  : AppColors.darkPeriwinkleTwo,
             ),
           ),
         ),
@@ -103,9 +112,13 @@ class _FilterState extends State<Filter> {
           padding: EdgeInsets.only(bottom: 30),
           child: Center(
             child: Text(
-              "Date",
+              AppLocalizations.of(context)!.filter_date,
               style: TextStyle(
                 fontSize: 24,
+                color: (_theme == "dark")
+                    ? Colors.white
+                    : AppColors.darkPeriwinkle,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
@@ -120,7 +133,12 @@ class _FilterState extends State<Filter> {
               setToggleActive(0);
             });
           },
-          child: Text("clean filters"),
+          child: Text(
+            AppLocalizations.of(context)!.filter_remove_filter,
+            style: TextStyle(
+              color: AppColors.darkGreyBlue,
+            ),
+          ),
         ),
         _saveFilterButton(),
       ],
@@ -168,10 +186,12 @@ class _FilterState extends State<Filter> {
           ),
         ),
         IconButton(
-          icon: Image.asset('assets/filter/darkThemeIconsCalendar.png'),
+          icon: Image.asset('assets/filter/$_theme/darkThemeIconsCalendar.png'),
           onPressed: () {
-            setState(() {
-              _datePicker(context).then((value) => _startTime = value);
+            _datePicker(context).then((value) {
+              setState(() {
+                _startTime = value;
+              });
             });
           },
         ),
@@ -189,10 +209,12 @@ class _FilterState extends State<Filter> {
           ),
         ),
         IconButton(
-          icon: Image.asset('assets/filter/darkThemeIconsCalendar.png'),
+          icon: Image.asset('assets/filter/$_theme/darkThemeIconsCalendar.png'),
           onPressed: () {
-            setState(() {
-              _datePicker(context).then((value) => _endTime = value);
+            _datePicker(context).then((value) {
+              setState(() {
+                _endTime = value;
+              });
             });
           },
         ),
@@ -225,7 +247,10 @@ class _FilterState extends State<Filter> {
 
   Widget _dateDecorator(DateTime _date) {
     final String _month = MonthService().getMonth(context, _date.month);
-    return Text("$_month ${_date.day}, ${_date.year}");
+    return Text(
+      "$_month ${_date.day}, ${_date.year}",
+      style: TextStyle(color: Colors.white),
+    );
   }
 
   Widget _selectDate() {
@@ -237,14 +262,14 @@ class _FilterState extends State<Filter> {
             _expandedColumn(
               Text(
                 AppLocalizations.of(context)!.filter_date_startDate,
-                style: TextStyle(fontSize: 24),
+                style: TextStyle(fontSize: 24, color: Colors.white),
               ),
               _datePickerDecoration(_startDatePicker()),
             ),
             _expandedColumn(
               Text(
-                AppLocalizations.of(context)!.filter_date_startDate,
-                style: TextStyle(fontSize: 24),
+                AppLocalizations.of(context)!.filter_date_EndDate,
+                style: TextStyle(fontSize: 24, color: Colors.white),
               ),
               _datePickerDecoration(_endDatePicker()),
             ),
@@ -313,13 +338,23 @@ class _FilterState extends State<Filter> {
               primary: Colors.white,
               backgroundColor: _currencyIsActive[i]
                   ? AppColors.darkPeriwinkle
-                  : AppColors.dark,
+                  : Color.fromRGBO(0, 0, 0, 0),
               side: BorderSide(
                 width: 2,
                 color: AppColors.darkPeriwinkle,
               ),
             ),
-            child: Text(Currency().currencies()[i], textAlign: TextAlign.right),
+            child: Text(
+              Currency().currencies()[i],
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                color: _currencyIsActive[i]
+                    ? Colors.white
+                    : (_theme == "dark")
+                        ? Colors.white
+                        : AppColors.darkPeriwinkle,
+              ),
+            ),
             onPressed: () {
               setToggleActive(i);
               _activeIndex = i;

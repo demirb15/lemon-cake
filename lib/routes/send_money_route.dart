@@ -19,6 +19,7 @@ class SendMoney extends StatefulWidget {
 class _SendMoneyState extends State<SendMoney> {
   late bool _isInitilized;
   late String countryCode;
+  String _theme = "dark";
   _SendMoneyState() {
     _isInitilized = false;
   }
@@ -28,6 +29,7 @@ class _SendMoneyState extends State<SendMoney> {
   late int id;
   @override
   Widget build(BuildContext context) {
+    _theme = StartUpApp.getTheme(context);
     if (!_isInitilized) {
       final _arguments = ModalRoute.of(context)!.settings.arguments as Map;
       setState(() {
@@ -59,7 +61,9 @@ class _SendMoneyState extends State<SendMoney> {
                       child: Stack(
                         fit: StackFit.passthrough,
                         children: [
-                          Image.asset('assets/send_money/icBack.png'),
+                          Image.asset('assets/send_money/$_theme/icBack.png'),
+                          Image.asset(
+                              'assets/send_money/$_theme/iconsChevron.png'),
                         ],
                       ),
                     ),
@@ -118,8 +122,8 @@ class _SendMoneyState extends State<SendMoney> {
                       ),
                     ),
                     SuccessFailPrompt().imageStack(isSuccess),
-                    isSuccess ? _successButton() : _successButton(),
-                    !isSuccess ? _successButton() : Container(),
+                    _buttonDecoration(_backtoEarthButton()),
+                    !isSuccess ? _buttonDecoration(_tryAgain()) : Container(),
                   ],
                 ),
               ),
@@ -133,28 +137,42 @@ class _SendMoneyState extends State<SendMoney> {
   }
 
   bool isSuccess = false;
-  Widget _successButton() {
-    return Padding(
-      padding: const EdgeInsets.all(15),
-      child: Container(
-        constraints: BoxConstraints.expand(
-            width: double.infinity,
-            height: 50 * MediaQuery.of(context).size.height / 830),
-        child: CupertinoButton(
-          child: Text(
-            AppLocalizations.of(context)!
-                .sendMoney_successPrompt_backToEarth_button_title,
-          ),
-          onPressed: () {
-            setState(() {
-              _blured = false;
-            });
-          },
+  Widget _tryAgain() {
+    return CupertinoButton(
+      child: Text(
+        AppLocalizations.of(context)!
+            .sendMoney_failurePrompt_tryAgain_button_title,
+        style: TextStyle(
           color: AppColors.darkPeriwinkle,
-          disabledColor: AppColors.darkPeriwinkle,
-          borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
       ),
+      onPressed: () {
+        setState(() {
+          _blured = false;
+        });
+      },
+      color: Colors.white,
+      disabledColor: Colors.white,
+      borderRadius: BorderRadius.all(Radius.circular(8.0)),
+    );
+    ;
+  }
+
+  Widget _backtoEarthButton() {
+    return CupertinoButton(
+      child: Text(
+        AppLocalizations.of(context)!
+            .sendMoney_successPrompt_backToEarth_button_title,
+      ),
+      onPressed: () {
+        setState(() {
+          _blured = false;
+        });
+        Navigator.pop(context);
+      },
+      color: AppColors.darkPeriwinkle,
+      disabledColor: AppColors.darkPeriwinkle,
+      borderRadius: BorderRadius.all(Radius.circular(8.0)),
     );
   }
 
