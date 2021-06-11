@@ -64,4 +64,11 @@ class HttpService {
     AccountDetailItems _accountDetailItem = AccountDetailItems.fromJson(_body);
     return _accountDetailItem;
   }
+
+  Future<void> updateBalance(int id, double amount) async {
+    /*final _url = Uri.parse("${_jsonUrl}accountDetail?id=$id");
+    final headers = {"Content-type": "application/json"};
+    final json = '{"amount": "$amount"}';
+    await http.patch(_url, headers: headers, body: json);*/
+  }
 }

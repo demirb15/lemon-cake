@@ -8,6 +8,7 @@ import 'package:flutter_template/main.dart';
 import 'package:flutter_template/theme/appColors.dart';
 import 'package:flutter_template/widgets/account_detail_items.dart';
 import 'package:flutter_template/widgets/http_service.dart';
+import 'package:flutter_template/widgets/success_fail_promt.dart';
 
 class SendMoney extends StatefulWidget {
   SendMoney({Key? key}) : super(key: key); //
@@ -24,13 +25,14 @@ class _SendMoneyState extends State<SendMoney> {
   late AccountDetailItems _accountDetailItems;
   String _accountType = "";
   bool _blured = false;
+  late int id;
   @override
   Widget build(BuildContext context) {
     if (!_isInitilized) {
       final _arguments = ModalRoute.of(context)!.settings.arguments as Map;
       setState(() {
         _accountType = _arguments['accountType'] as String;
-        int id = _arguments['id'];
+        id = _arguments['id'];
         HttpService().getAccountDetails(id).then((value) {
           _accountDetailItems = value;
           _amountPlaceHolder = '${_accountDetailItems.currency}';
@@ -45,40 +47,40 @@ class _SendMoneyState extends State<SendMoney> {
     }
     return !_isInitilized
         ? Scaffold()
-        : Stack(
-            fit: StackFit.expand,
-            children: <Widget>[
-              Scaffold(
-                appBar: AppBar(
-                  title: Text(AppLocalizations.of(context)!
-                      .sendMoney_navigationBar_title),
-                  centerTitle: true,
-                  leading: Builder(
-                    builder: (BuildContext context) {
-                      return IconButton(
-                        icon: Container(
-                          child: Stack(
-                            fit: StackFit.passthrough,
-                            children: [
-                              Image.asset('assets/send_money/icBack.png'),
-                            ],
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      );
+        : Scaffold(
+            appBar: AppBar(
+              title: Text(
+                  AppLocalizations.of(context)!.sendMoney_navigationBar_title),
+              centerTitle: true,
+              leading: Builder(
+                builder: (BuildContext context) {
+                  return IconButton(
+                    icon: Container(
+                      child: Stack(
+                        fit: StackFit.passthrough,
+                        children: [
+                          Image.asset('assets/send_money/icBack.png'),
+                        ],
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
                     },
-                  ),
-                ),
-                body: _sendMoneyColumn(),
+                  );
+                },
               ),
-              _bluredContent(),
-            ],
+            ),
+            body: Stack(
+              fit: StackFit.passthrough,
+              children: <Widget>[
+                _sendMoneyColumn(),
+                bluredContent(),
+              ],
+            ),
           );
   }
 
-  Widget _bluredContent() {
+  Widget bluredContent() {
     if (_blured) {
       return Positioned.fill(
         child: BackdropFilter(
@@ -87,22 +89,37 @@ class _SendMoneyState extends State<SendMoney> {
             sigmaY: 2.0,
           ),
           child: Column(
-            children: <Widget>[
+            children: [
               Expanded(child: Container()),
               Container(
-                color: Colors.white,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(20),
+                    topLeft: Radius.circular(20),
+                  ),
+                ),
                 child: Column(
                   children: <Widget>[
-                    Text(AppLocalizations.of(context)!
-                        .sendMoney_successPrompt_success),
-                    CupertinoButton(
-                      child: Text("asd"),
-                      onPressed: () {
-                        setState(() {
-                          _blured = false;
-                        });
-                      },
+                    Container(
+                      padding: EdgeInsets.all(40),
+                      child: Text(
+                        isSuccess
+                            ? AppLocalizations.of(context)!
+                                .sendMoney_successPrompt_success
+                            : AppLocalizations.of(context)!
+                                .sendMoney_failurePrompt_fail,
+                        style: TextStyle(
+                          color: AppColors.darkPeriwinkle,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
+                      ),
                     ),
+                    SuccessFailPrompt().imageStack(isSuccess),
+                    isSuccess ? _successButton() : _successButton(),
+                    !isSuccess ? _successButton() : Container(),
                   ],
                 ),
               ),
@@ -113,6 +130,32 @@ class _SendMoneyState extends State<SendMoney> {
     }
 
     return Container();
+  }
+
+  bool isSuccess = false;
+  Widget _successButton() {
+    return Padding(
+      padding: const EdgeInsets.all(15),
+      child: Container(
+        constraints: BoxConstraints.expand(
+            width: double.infinity,
+            height: 50 * MediaQuery.of(context).size.height / 830),
+        child: CupertinoButton(
+          child: Text(
+            AppLocalizations.of(context)!
+                .sendMoney_successPrompt_backToEarth_button_title,
+          ),
+          onPressed: () {
+            setState(() {
+              _blured = false;
+            });
+          },
+          color: AppColors.darkPeriwinkle,
+          disabledColor: AppColors.darkPeriwinkle,
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+        ),
+      ),
+    );
   }
 
   TextStyle _textStyleMain(double fontsize) {
@@ -265,12 +308,23 @@ class _SendMoneyState extends State<SendMoney> {
         AppLocalizations.of(context)!.sendMoney_send_money_button_title,
       ),
       onPressed: () {
-        /* print(ibanEditingController.text);
-        print(recipentDetailcontroler.text);
-        print(amountFieldControler.text); */
-        setState(() {
-          _blured = true;
-        });
+        String iban = ibanEditingController.text;
+        String recipentDetails = recipentDetailcontroler.text;
+        String amount = amountFieldControler.text.split(' ')[0];
+        late var _amount;
+        if (amount.isNotEmpty) _amount = double.parse(amount);
+        // TODO: uncomment to have update json server
+        // HttpService().updateBalance(id, _amount);
+
+        bool temp =
+            iban.isNotEmpty && recipentDetails.isNotEmpty && amount.isNotEmpty;
+        if (temp) {
+          if (_amount > double.parse(_accountDetailItems.amount)) temp = false;
+          setState(() {
+            isSuccess = temp;
+            _blured = true;
+          });
+        }
       },
       color: AppColors.darkPeriwinkle,
       disabledColor: AppColors.darkPeriwinkle,
