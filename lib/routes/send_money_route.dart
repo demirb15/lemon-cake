@@ -76,12 +76,21 @@ class _SendMoneyState extends State<SendMoney> {
                 },
               ),
             ),
-            body: Stack(
-              fit: StackFit.passthrough,
-              children: <Widget>[
-                _sendMoneyColumn(),
-                bluredContent(),
-              ],
+            body: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height * 90 / 100,
+                ),
+                child: IntrinsicHeight(
+                  child: Stack(
+                    fit: StackFit.passthrough,
+                    children: <Widget>[
+                      _sendMoneyColumn(),
+                      bluredContent(),
+                    ],
+                  ),
+                ),
+              ),
             ),
           );
   }

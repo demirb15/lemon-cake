@@ -138,7 +138,7 @@ class _FilterState extends State<Filter> {
           child: Text(
             AppLocalizations.of(context)!.filter_remove_filter,
             style: TextStyle(
-              color: AppColors.darkGreyBlue,
+              color: (_theme == "dark") ? Colors.white : AppColors.eastBay,
             ),
           ),
         ),

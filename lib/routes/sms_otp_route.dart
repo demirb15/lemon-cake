@@ -52,15 +52,24 @@ class _SmsOtpState extends State<SmsOtp> {
           },
         ),
       ),
-      body: Stack(
-        children: <Widget>[
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 0, bottom: 15.0),
-              child: _otpColumn(),
+      body: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height * 90 / 100,
+          ),
+          child: IntrinsicHeight(
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 0, bottom: 15.0),
+                    child: _otpColumn(),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

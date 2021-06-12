@@ -80,7 +80,16 @@ class _AccountDetailsState extends State<AccountDetails> {
                 },
               ),
             ),
-            body: _accountDetailColumn(),
+            body: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height * 90 / 100,
+                ),
+                child: IntrinsicHeight(
+                  child: _accountDetailColumn(),
+                ),
+              ),
+            ),
           );
   }
 
