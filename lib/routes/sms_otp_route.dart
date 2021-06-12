@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_template/theme/appColors.dart';
+import 'package:flutter_template/widgets/drawer.dart';
 import 'package:flutter_template/widgets/pref_widget.dart';
 
 import '../main.dart';
@@ -35,6 +36,7 @@ class _SmsOtpState extends State<SmsOtp> {
     _theme = StartUpApp.getTheme(context);
 
     return Scaffold(
+      drawer: AppDrawer().sharedDrawer(context),
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.otp_navigationBar_title),
         centerTitle: true,

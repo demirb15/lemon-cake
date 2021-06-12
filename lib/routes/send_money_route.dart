@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_template/main.dart';
 import 'package:flutter_template/theme/appColors.dart';
 import 'package:flutter_template/widgets/account_detail_items.dart';
+import 'package:flutter_template/widgets/drawer.dart';
 import 'package:flutter_template/widgets/http_service.dart';
 import 'package:flutter_template/widgets/success_fail_promt.dart';
 
@@ -50,6 +51,7 @@ class _SendMoneyState extends State<SendMoney> {
     return !_isInitilized
         ? Scaffold()
         : Scaffold(
+            drawer: AppDrawer().sharedDrawer(context),
             appBar: AppBar(
               title: Text(
                   AppLocalizations.of(context)!.sendMoney_navigationBar_title),
@@ -155,7 +157,6 @@ class _SendMoneyState extends State<SendMoney> {
       disabledColor: Colors.white,
       borderRadius: BorderRadius.all(Radius.circular(8.0)),
     );
-    ;
   }
 
   Widget _backtoEarthButton() {
@@ -179,14 +180,16 @@ class _SendMoneyState extends State<SendMoney> {
   TextStyle _textStyleMain(double fontsize) {
     return TextStyle(
       fontSize: fontsize,
-      color: Colors.white,
+      color: (_theme == "dark") ? Colors.white : AppColors.dusk,
     );
   }
 
   TextStyle _textStyleSecond(double fontsize) {
     return TextStyle(
       fontSize: fontsize,
-      color: AppColors.seafoamBlue,
+      //color: AppColors.seafoamBlue,
+      color:
+          (_theme == "dark") ? AppColors.seafoamBlue : AppColors.darkPeriwinkle,
     );
   }
 
@@ -198,7 +201,7 @@ class _SendMoneyState extends State<SendMoney> {
           alignment: Alignment.topLeft,
           child: Text(
             AppLocalizations.of(context)!.sendMoney_sending_account,
-            style: _textStyleSecond(16),
+            style: _textStyleMain(16),
           ),
         ),
         Container(
@@ -206,7 +209,7 @@ class _SendMoneyState extends State<SendMoney> {
           alignment: Alignment.topLeft,
           child: Text(
             "$_accountType",
-            style: _textStyleMain(24),
+            style: _textStyleSecond(24),
           ),
         ),
         _ibanField(),

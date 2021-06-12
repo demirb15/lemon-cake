@@ -53,5 +53,7 @@
     "month_9":"Eyl",
     "month_10":"Eki",
     "month_11":"Kas",
-    "month_12":"Ara"
+    "month_12":"Ara",
+    "drawer_pickLanguage":"Dil Seç",
+    "drawer_darkThemeSwitch":"Koyu Tema"
 }

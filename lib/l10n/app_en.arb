@@ -53,5 +53,7 @@
     "month_9":"Sep",
     "month_10":"Oct",
     "month_11":"Nov",
-    "month_12":"Dec"
+    "month_12":"Dec",
+    "drawer_pickLanguage":"Pick Language",
+    "drawer_darkThemeSwitch":"Enable Dark Theme"
 }

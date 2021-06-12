@@ -19,4 +19,7 @@ class AppColors {
   static const Color puplyPink = const Color.fromRGBO(238, 131, 231, 1);
   static const Color verLightBlueTwo = const Color.fromRGBO(225, 231, 244, 1);
   static const Color softBlue = const Color.fromRGBO(78, 137, 255, 1);
+  static const Color fuchsiaBlue = const Color.fromRGBO(100, 85, 194, 1);
+  static const Color eastBay = const Color.fromRGBO(59, 63, 107, 1);
+  static const Color midGray = const Color.fromRGBO(99, 98, 102, 1);
 }

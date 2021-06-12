@@ -33,7 +33,7 @@ class AppTheme {
       ),
       textTheme: Theme.of(context)
           .textTheme
-          .apply(displayColor: Colors.black, bodyColor: Colors.black),
+          .apply(displayColor: Colors.black, bodyColor: AppColors.midGray),
     );
   }
 

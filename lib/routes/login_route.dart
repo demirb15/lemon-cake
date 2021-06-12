@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_template/l10n/L10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_template/main.dart';
 import 'package:flutter_template/theme/appColors.dart';
+import 'package:flutter_template/widgets/drawer.dart';
+import 'package:flutter_template/widgets/language_dropdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_template/widgets/pref_widget.dart';
 import 'custom_router.dart';
@@ -39,8 +40,8 @@ class _LoginRouteState extends State<LoginRoute> {
   Widget build(BuildContext context) {
     _theme = StartUpApp.getTheme(context);
 
-    Locale _locale = Localizations.localeOf(context);
     return Scaffold(
+      drawer: AppDrawer().sharedDrawer(context),
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.login_navigationBar_title),
         centerTitle: true,
@@ -48,31 +49,7 @@ class _LoginRouteState extends State<LoginRoute> {
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 10.0),
-            child: DropdownButton<Language>(
-              underline: SizedBox(),
-              icon: Text("${_locale.languageCode}".toUpperCase()),
-              onChanged: (_) {
-                _switchLanguage(_);
-              },
-              items: Language.languageList().map(
-                (Language lang) {
-                  return DropdownMenuItem<Language>(
-                      value: lang,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Text(
-                            lang.name,
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
-                          Text(lang.flag),
-                        ],
-                      ));
-                },
-              ).toList(),
-            ),
+            child: LanguagePicker().dropDownLanguagePicker(context),
           )
         ],
       ),
@@ -132,13 +109,6 @@ class _LoginRouteState extends State<LoginRoute> {
         _loginButton(),
       ],
     );
-  }
-
-  void _switchLanguage(_) {
-    var _index = L10n.all
-        .indexWhere((element) => element.languageCode == _.languageCode);
-    Locale temp = L10n.all[_index];
-    StartUpApp.setLocale(context, temp);
   }
 
   Widget _rememberMeSwitch() {

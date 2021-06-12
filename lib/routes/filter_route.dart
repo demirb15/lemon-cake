@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_template/theme/appColors.dart';
+import 'package:flutter_template/widgets/drawer.dart';
 import 'package:flutter_template/widgets/month_ser.dart';
 import 'package:flutter_template/widgets/pref_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -50,6 +51,7 @@ class _FilterState extends State<Filter> {
 
     _currencyIsActive[_activeIndex] = true;
     return Scaffold(
+      drawer: AppDrawer().sharedDrawer(context),
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.filter_navigationBar_title),
         centerTitle: true,

@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_template/main.dart';
 import 'package:flutter_template/theme/appColors.dart';
 import 'package:flutter_template/widgets/account_detail_items.dart';
+import 'package:flutter_template/widgets/drawer.dart';
 import 'package:flutter_template/widgets/http_service.dart';
 import 'package:flutter_template/widgets/pref_widget.dart';
 import 'package:flutter_template/widgets/extensions.dart';
@@ -16,10 +18,9 @@ class AccountDetails extends StatefulWidget {
   _AccountDetailsState createState() => _AccountDetailsState();
 }
 
-late AccountDetailItems _accountDetailItem;
-Color _secondaryTextColor = AppColors.seafoamBlue;
-
 class _AccountDetailsState extends State<AccountDetails> {
+  late AccountDetailItems _accountDetailItem;
+  Color _secondaryTextColor = Colors.white;
   _AccountDetailsState() {
     HttpService().getAccountDetails(4);
     CustomPref().getLoginStatus().then((value) {
@@ -37,6 +38,8 @@ class _AccountDetailsState extends State<AccountDetails> {
   @override
   Widget build(BuildContext context) {
     _theme = StartUpApp.getTheme(context);
+    _secondaryTextColor =
+        (_theme == "dark") ? AppColors.seafoamBlue : AppColors.fuchsiaBlue;
     if (!_initilized) {
       _arguments = ModalRoute.of(context)!.settings.arguments as Map;
       setState(() {
@@ -53,6 +56,7 @@ class _AccountDetailsState extends State<AccountDetails> {
     return !_initilized
         ? Scaffold()
         : Scaffold(
+            drawer: AppDrawer().sharedDrawer(context),
             appBar: AppBar(
               title: Text(AppLocalizations.of(context)!
                   .accountDetail_navigationBar_title),
@@ -119,6 +123,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                     child: Text(
                       '${_accountDetailItem.customerName} ${_accountDetailItem.customerLastName}',
                       style: TextStyle(
+                        fontWeight: FontWeight.bold,
                         color: _secondaryTextColor,
                         fontSize: 20,
                       ),
@@ -128,7 +133,6 @@ class _AccountDetailsState extends State<AccountDetails> {
                     child: Text(
                       '${_accountDetailItem.customerCity}, ${_accountDetailItem.customerCountry}',
                       style: TextStyle(
-                        //color: _secondaryTextColor,
                         fontSize: 16,
                       ),
                     ),
@@ -223,8 +227,12 @@ class _AccountDetailsState extends State<AccountDetails> {
                   ),
                 ),
                 Text(
-                  '${_accountDetailItem.amount}',
-                  style: TextStyle(fontSize: 24),
+                  '${_accountDetailItem.amount} ${_accountDetailItem.currency}',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: _secondaryTextColor,
+                  ),
                 ),
               ),
             ),

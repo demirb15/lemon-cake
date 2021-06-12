@@ -7,6 +7,7 @@ import 'package:flutter_template/main.dart';
 import 'package:flutter_template/theme/appColors.dart';
 import 'package:flutter_template/widgets/account_items.dart';
 import 'package:flutter_template/widgets/currency.dart';
+import 'package:flutter_template/widgets/drawer.dart';
 import 'package:flutter_template/widgets/http_service.dart';
 import 'package:flutter_template/widgets/month_ser.dart';
 import 'package:flutter_template/widgets/pref_widget.dart';
@@ -72,6 +73,7 @@ class _AccountState extends State<Account> {
     }
     _theme = StartUpApp.getTheme(context);
     return Scaffold(
+      drawer: AppDrawer().sharedDrawer(context),
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.account_navigationBar_title),
         centerTitle: true,
@@ -202,13 +204,6 @@ class _AccountState extends State<Account> {
           ),
         ),
         _itemList(),
-        CupertinoButton(
-          child: Text("${StartUpApp.getTheme(context)}"),
-          onPressed: () {
-            StartUpApp.switchTheme(context);
-            Navigator.pushNamed(context, accountRoute);
-          },
-        ),
       ],
     );
   }

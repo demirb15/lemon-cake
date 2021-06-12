@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_template/routes/custom_router.dart';
 import 'package:flutter_template/theme/appColors.dart';
+import 'package:flutter_template/widgets/drawer.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -13,6 +14,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: AppDrawer().sharedDrawer(context),
       body: Stack(
         fit: StackFit.passthrough,
         children: [
