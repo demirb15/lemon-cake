@@ -198,9 +198,6 @@ class _LoginRouteState extends State<LoginRoute> {
     return TextFormField(
       controller: usernameController,
       autofocus: true,
-      onTap: () {
-        usernameController = new TextEditingController();
-      },
       decoration: _textFormFieldDecoration(context,
           AppLocalizations.of(context)!.login_username_text_field_placeholder),
       inputFormatters: <TextInputFormatter>[

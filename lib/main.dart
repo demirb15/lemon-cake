@@ -79,7 +79,6 @@ class _StartUpAppState extends State<StartUpApp> {
   Future<String> getTheme() async {
     final _prefs = await SharedPreferences.getInstance();
     String _themeString = _prefs.getString("theme") ?? 'light';
-    //print(_themeString);
     return _themeString;
   }
 
@@ -117,7 +116,7 @@ class _StartUpAppState extends State<StartUpApp> {
       darkTheme: AppTheme.dark(context),
       debugShowCheckedModeBanner: false,
       localizationsDelegates: [
-        AppLocalizations.delegate, // Add this line
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

@@ -12,12 +12,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_localizations: # Add this line
-    sdk: flutter         # Add this line
+  flutter_localizations: 
+    sdk: flutter 
   intl: ^0.17.0
   shared_preferences: ^2.0.3
   cupertino_icons: ^1.0.2
-  carousel_slider: ^4.0.0-nullsafety.0
+  carousel_slider: ^4.0.0
   http: ^0.13.3
   share: ^2.0.4
   image_picker: ^0.8.0
