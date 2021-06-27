@@ -7,7 +7,7 @@ RocketBank is an native Mobile Banking App for both Android and IOS. RocketBank 
 | Name                  | Student Id |
 | --------------------- | ---------- |
 | Berat Can Demir       | 150150057  |
-| Halil Ibrahim Kafagöz | 150160155  |
+| Halil Ibrahim Karagöz | 150160155  |
 
 ## Project purpose and Targets
 
