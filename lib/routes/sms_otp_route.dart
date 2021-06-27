@@ -131,7 +131,7 @@ class _SmsOtpState extends State<SmsOtp> {
               child: _animatedTimerBar(),
             ),
             Positioned(
-              top: 262,
+              top: 260,
               right: 40,
               child: _animatedTimerBarWhite(),
             ),
