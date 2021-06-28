@@ -61,6 +61,7 @@
 <li>User should be able to send money</li>
 </ul>
 <h2 id="documentation-links">Documentation links</h2>
+<p>For starting with RocketBank App, view our online<a href="https://flutter-lemon-cake.herokuapp.com/">Documentation</a></p>
 <h2 id="information-about-services">Information about Services</h2>
 <h3 id="login-and-logout">Login and Logout</h3>
 <p>User is able to log into the app, via username and a password. User is also able to choose to keep their username for in cache to login later.</p>

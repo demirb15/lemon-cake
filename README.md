@@ -24,7 +24,9 @@ This project aims to build an native app. In order to accomplish that this proje
 - User should be able to examine an account
 - User should be able to send money
 
-## Documentation links
+## Documentation
+
+For starting with RocketBank App, view our online [documentation](https://flutter-lemon-cake.herokuapp.com)
 
 ## Information about Services
 
